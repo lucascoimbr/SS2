@@ -5,7 +5,7 @@ import pandas as pd
 import json
 from datetime import datetime
 
-async def getJSON():
+async def getJSON(redisJson):
 
     # store the URL in url as 
     # parameter for urlopen
@@ -42,7 +42,17 @@ async def getJSON():
 
         #Multiplicador que define a pontuação máxima
         max_score_mult = 1
-        for i in raw[j]['rounds']:
+        print()
+
+        ##Pega começa a ler a partir do último round que já foi lido no redis
+        try:
+            lastRound = int(redisJson[j]["maxScore"])/100-1
+        except:
+            lastRound = 0
+
+        for k in range(len(raw[j]['rounds'])):
+
+            i = raw[j]['rounds'][k]
 
             #Nota no round
             grade = int(i['roundscorebonus'])
